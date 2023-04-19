@@ -20,7 +20,7 @@
                         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
                         crossorigin="anonymous"></script>
 
-                    <link rel="stylesheet" href="/css/showStyle.css">
+                    <link rel="stylesheet" href="/css/recordsStyle.css">
 
 
                     <!DOCTYPE html>
@@ -28,7 +28,7 @@
 
                     <head>
                         <meta charset="UTF-8">
-                        <title>Books</title>
+                        <title>Records</title>
                     </head>
 
                     <body>
@@ -61,25 +61,40 @@
                                 </thead>
                                 <tbody>
 
-                                    <c:forEach var="show" items="${allShows}">
+                                    <c:forEach var="employee" items="${allEmployees}">
                                         <tr>
                                             <th scope="row">
-                                                <a href="/show/${show.id}">
-                                                    <c:out value="${show.title}"></c:out>
+                                                <a href="/show/${employee.id}">
+                                                    <c:out value="${employee.firstName}"></c:out>
                                                 </a>
                                             </th>
                                             <td>
-                                                <c:out value="${show.network}"></c:out>
+                                                <c:out value="${employee.lastName}"></c:out>
                                             </td>
                                             <td>
-                                                <c:out value="${book.evgRating}"></c:out>
+                                                <c:out value="${employee.age}"></c:out>
+                                            </td> 
+                                             <td>
+                                                <c:out value="${employee.status}"></c:out>
+                                            </td> 
+                                             <td>
+                                                <c:out value="${employee.companstation}"></c:out>
+                                            </td> 
+                                             <td>
+                                                <c:out value="${employee.location}"></c:out>
+                                            </td> 
+                                              <td>
+                                                <c:out value="${employee.phoneNum}"></c:out>
+                                            </td>  
+                                             <td>
+                                                <c:out value="${employee.adress}"></c:out>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
                             <p>
-                                <a class="btn btn-primary" href="/show/new">Add an Employee </a>
+                                <a class="btn btn-primary" href="/employee/new">Add an Employee </a>
                             </p>
                         </div>
                     </body>

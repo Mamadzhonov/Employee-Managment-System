@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.relationships.models.Employee;
 import com.relationships.models.User;
 import com.relationships.models.UserLogin;
+import com.relationships.services.EmployeeService;
 import com.relationships.services.UserService;
 
 @Controller
@@ -25,120 +26,117 @@ public class Homepage {
     private UserService userServ;
 
     @Autowired
-    // private ShowService showServ;
+    private EmployeeService employeeServ;
 
     @GetMapping("/")
     public String index(Model model, HttpSession session) {
-        model.addAttribute("newUser", new User());
-        model.addAttribute("newLogin", new UserLogin());
+        // model.addAttribute("newUser", new User());
+        // model.addAttribute("newLogin", new UserLogin());
         return "Index.jsp";
     }
 
-    // @GetMapping("/Login")
-    // public String register(Model model, HttpSession session) {
-    //     model.addAttribute("newUser", new User());
-    //     model.addAttribute("newLogin", new UserLogin());
-    //     return "LoginPage.jsp";
-    // }
+    @GetMapping("/login")
+    public String register(Model model, HttpSession session) {
+        model.addAttribute("newUser", new User());
+        model.addAttribute("newLogin", new UserLogin());
+        return "LoginPage.jsp";
+    }
 
-    // @PostMapping("/register")
-    // public String register(@Valid @ModelAttribute("newUser") User user,
-    // BindingResult result, HttpSession session,
-    // Model model, RedirectAttributes redirect) {
-    // model.addAttribute("newLogin", new UserLogin());
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("newUser") User user,
+            BindingResult result, HttpSession session,
+            Model model, RedirectAttributes redirect) {
+        model.addAttribute("newLogin", new UserLogin());
 
-    // if (result.hasErrors()) {
-    // return "LoginPage.jsp";
-    // }
-    // if (userServ.findByEmail(user.getEmail())) {
-    // redirect.addFlashAttribute("emailUsed", "Email is already used!");
-    // return "redirect:/";
-    // }
+        if (result.hasErrors()) {
+            return "LoginPage.jsp";
+        }
+        if (userServ.findByEmail(user.getEmail())) {
+            redirect.addFlashAttribute("emailUsed", "Email is already used!");
+            return "redirect:/";
+        }
 
-    // User newUser = userServ.register(user, result);
+        User newUser = userServ.register(user, result);
 
-    // if (newUser == null) {
-    // model.addAttribute("newLogin", new UserLogin());
-    // return "LoginPage.jsp";
-    // }
+        if (newUser == null) {
+            model.addAttribute("newLogin", new UserLogin());
+            return "LoginPage.jsp";
+        }
 
-    // session.setAttribute("userId", user.getId());
-    // return "redirect:/shows";
-    // }
+        session.setAttribute("userId", user.getId());
+        return "redirect:/shows";
+    }
 
-    // @PostMapping("/login")
-    // public String login(@Valid @ModelAttribute("newLogin") UserLogin usrLogin,
-    // HttpSession session, Model model,
-    // BindingResult result, RedirectAttributes redirect) {
+    @PostMapping("/login")
+    public String login(@Valid @ModelAttribute("newLogin") UserLogin usrLogin,
+            HttpSession session, Model model,
+            BindingResult result, RedirectAttributes redirect) {
 
-    // User user = userServ.login(usrLogin, result);
-    // if (user == null) {
-    // model.addAttribute("newUser", new User());
-    // redirect.addFlashAttribute("loginIssue", "Login or Password is not valid!");
-    // return "LoginPage.jsp";
-    // }
-    // session.setAttribute("userId", user.getId());
-    // return "redirect:/shows";
-    // }
+        User user = userServ.login(usrLogin, result);
+        if (user == null) {
+            model.addAttribute("newUser", new User());
+            redirect.addFlashAttribute("loginIssue", "Login or Password is not valid!");
+            return "LoginPage.jsp";
+        }
+        session.setAttribute("userId", user.getId());
+        return "redirect:/records";
+    }
 
-    // @GetMapping("/shows")
-    // public String dashboard(HttpSession session, Model model, RedirectAttributes
-    // redirect) {
-    // if (session.getAttribute("userId") == null) {
-    // redirect.addFlashAttribute("login", "Need to login to access Shows page");
-    // return "redirect:/";
-    // }
-    // Long id = (Long) session.getAttribute("userId");
-    // User loggedUser = userServ.findById(id);
-    // model.addAttribute("user", loggedUser);
-    // model.addAttribute("allShows", showServ.allShows());
-    // return "TVShow.jsp";
-    // }
+    @GetMapping("/records")
+    public String dashboard(HttpSession session, Model model, RedirectAttributes redirect) {
+        if (session.getAttribute("userId") == null) {
+            redirect.addFlashAttribute("login", "Need to login to access Shows page");
+            return "redirect:/login";
+        }
+        Long id = (Long) session.getAttribute("userId");
+        User loggedUser = userServ.findById(id);
+        model.addAttribute("user", loggedUser);
+        model.addAttribute("allEmployees", employeeServ.allEmployees());
+        return "Records.jsp";
+    }
 
-    // @GetMapping("/logout")
-    // public String logout(HttpSession session) {
-    // session.setAttribute("userId", null);
-    // return "redirect:/";
-    // }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.setAttribute("userId", null);
+        return "redirect:/";
+    }
 
-    // @GetMapping("/show/new")
-    // public String newShow(@ModelAttribute("newShow") Employee newShow,
-    // HttpSession session,
-    // RedirectAttributes redirect, Model model) {
-    // if (session.getAttribute("userId") == null) {
-    // redirect.addFlashAttribute("login", "Need to login to access this page");
-    // return "redirect:/";
-    // }
-    // return "NewEmployee.jsp";
-    // }
+    @GetMapping("/employee/new")
+    public String newShow(@ModelAttribute("newShow") Employee newShow,
+            HttpSession session,
+            RedirectAttributes redirect, Model model) {
+        if (session.getAttribute("userId") == null) {
+            redirect.addFlashAttribute("login", "Need to login to access this page");
+            return "redirect:/";
+        }
+        return "NewEmployee.jsp";
+    }
 
-    // @PostMapping("/show/new")
-    // public String createShow(@Valid @ModelAttribute("newShow") Employee newShow,
-    // BindingResult result, Model model,
-    // HttpSession session, RedirectAttributes redirect) {
-    // if (session.getAttribute("userId") == null) {
-    // redirect.addFlashAttribute("login", "Need to login to access this page");
-    // return "redirect:/";
-    // }
+    @PostMapping("/employee/new")
+    public String createShow(@Valid @ModelAttribute("newShow") Employee newEmployee,
+            BindingResult result, Model model,
+            HttpSession session, RedirectAttributes redirect) {
+        if (session.getAttribute("userId") == null) {
+            redirect.addFlashAttribute("login", "Need to login to access this page");
+            return "redirect:/";
+        }
 
-    // if (showServ.findAllByTitle(newShow.getTitle())) {
-    // redirect.addFlashAttribute("existedTitle", "This title already exist plase
-    // choose diferent title!");
-    // return "redirect:/show/new";
-    // }
+        if (employeeServ.findAllByTitle(newEmployee.getPhoneNum())) {
+            redirect.addFlashAttribute("existedTitle", "This phone number already exist please choose diferent title!");
+            return "redirect:/employee/new";
+        }
 
-    // if (result.hasErrors()) {
-    // return "NewShow.jsp";
-    // }
+        if (result.hasErrors()) {
+            return "NewShow.jsp";
+        }
 
-    // Long id = (Long) session.getAttribute("userId");
-    // User loggedUser = userServ.findById(id);
-    // model.addAttribute("user", loggedUser);
+        Long id = (Long) session.getAttribute("userId");
+        User loggedUser = userServ.findById(id);
+        model.addAttribute("user", loggedUser);
 
-    // newShow.setPostedBy(loggedUser.getUserName());
-    // showServ.create(newShow);
-    // return "redirect:/shows";
-    // }
+        employeeServ.create(newEmployee);
+        return "redirect:/records";
+    }
 
     // @GetMapping("/show/{id}")
     // public String showDetails(@PathVariable("id") Long id, HttpSession session,

@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
@@ -31,6 +30,7 @@ public class Employee {
     @Size(min = 2, message = "Please fill out this field bro!")
     private String lastName;
 
+    @Min(18)
     private Integer age;
 
     @Size(min = 2, message = "Please fill out this field bro!")
@@ -41,12 +41,16 @@ public class Employee {
 
     @Size(min = 2, message = "Please fill out this field bro!")
     private String location;
+
     @Size(min = 2, message = "Please fill out this field bro!")
     private String phoneNum;
 
     @Column(updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
+
+    @Size(min = 2, message = "Please fill out this field bro!")
+    private String adress;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
@@ -120,6 +124,14 @@ public class Employee {
 
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public String getAdress() {
+        return this.adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
     }
 
     public User getUsers() {

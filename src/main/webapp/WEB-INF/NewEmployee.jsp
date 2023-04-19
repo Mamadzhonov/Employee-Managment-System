@@ -20,7 +20,7 @@
                         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
                         crossorigin="anonymous"></script>
 
-                    <link rel="stylesheet" href="/css/showStyle.css">
+                    <link rel="stylesheet" href="/css/recordsStyle.css">
 
 
                     <!DOCTYPE html>
@@ -35,13 +35,13 @@
 
                         <div class="hearderLinks">
                             <h1 class="text-info">Create an new Employee</h1>
-                            <a class="btn btn-primary" href="/shows">Back to Employees</a>
+                            <a class="btn btn-primary" href="/records">Back to Employees</a>
                         </div>
                         <p class="text-danger">
                             <c:out value="${existedTitle}"></c:out>
                         </p>
                         <div class="col">
-                            <form:form action="/show/new" method="POST" modelAttribute="newShow">
+                            <form:form action="/employee/new" method="POST" modelAttribute="newShow">
 
                                 <div class="col-md-5 mb-3">
                                     <form:label path="firstName">First Name</form:label>
@@ -65,9 +65,9 @@
                                     <form:errors class="text-danger" path="status"></form:errors>
                                 </div>
                                 <div class="col-md-5 mb-3">
-                                    <form:label path="compensation">Compensation</form:label>
-                                    <form:input path="compensation" class="form-control" placeholder="Compensation" />
-                                    <form:errors class="text-danger" path="compensation"></form:errors>
+                                    <form:label path="companstation">Compensation</form:label>
+                                    <form:input path="companstation" class="form-control" placeholder="Compensation" />
+                                    <form:errors class="text-danger" path="companstation"></form:errors>
                                 </div>
                                 <div class="col-md-5 mb-3">
                                     <form:label path="location">Station Location</form:label>
